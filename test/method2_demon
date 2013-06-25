@@ -1,0 +1,23 @@
+ add jar /home/yuanhang.ghj/123/jython-2.5.3.jar;  
+ add jar /home/yuanhang.ghj/123/toolkit.jar;        
+
+ create temporary function pym  as 'python.Method2';
+
+ 
+ 
+ -- 内置函数;
+ select pym('len', 'alimama') from dual;
+ -- 错误case:
+--  select pym('len', 'alimama', 'alibaba') from dual;
+  
+  --启动python配置;
+ set hive.job.pre.hooks=python.PythonConf; 
+  --引入外部py文件;
+ add file /home/yuanhang.ghj/123/my.py;
+ 
+ 
+ -- 外部函数;
+ select  pym('echo', '阿里妈妈')  from dual;
+ 
+ quit;
+ 

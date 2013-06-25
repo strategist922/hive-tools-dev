@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/taobao_hadoop/lib/javolution-5.5.1.jar"/>
+	<classpathentry kind="lib" path="/yunti_hadoop_s/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="/yunti_hadoop_s/lib/commons-logging-api-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/hadoop-0.19.1-dc-core.jar"/>
+	<classpathentry kind="lib" path="lib/hive-exec-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jython-2.5.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

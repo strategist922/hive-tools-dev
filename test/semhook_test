@@ -1,0 +1,10 @@
+ add jar /home/yuanhang.ghj/123/jython-2.5.3.jar;  
+ add jar /home/yuanhang.ghj/12.jar;        
+ set hive.semantic.analyzer.hook=hook.SemHook;
+ 
+  select len(s) from dual ;
+  
+ select count(s) from dual;
+ 
+  select py("return len(col1)", 'alimama') from dual;
+ 

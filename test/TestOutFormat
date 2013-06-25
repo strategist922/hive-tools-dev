@@ -1,0 +1,13 @@
+add jar /home/yuanhang.ghj/123/toolkit.jar; 
+drop table yh_z;
+
+create table yh_z (a string ) stored as 
+  inputformat 'org.apache.hadoop.mapred.KeyValueTextInputFormat' outputformat 'KeyValueTextOutputFormat' ;
+
+ SET hive.exec.compress.output=false;   
+ 
+insert overwrite table yh_z select "a" from dual;
+
+select * from yh_z;
+
+dfs -cat   /group/tbdev/yuanhang.ghj/hive/yh_z/*

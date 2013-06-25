@@ -1,0 +1,20 @@
+ drop table debug_join_1;
+
+create table debug_join_1 ( ac1 string , ac2 string , ac3 string) 
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '10'
+stored as textfile;
+
+load data local inpath '/home/yuanhang.ghj/debug_join_1.data'  into table debug_join_1;
+ 
+ 
+ add jar /home/yuanhang.ghj/0605/12.jar;      
+ create temporary function agg2map  as 'udf.AggToMap';
+ 
+ select agg2map('sfsd') from dual;
+ select agg2map(ac1) from debug_join_1; 
+ 
+ set mapred.reduce.tasks=3;
+   select agg2map(ac1) from debug_join_1 group by ac2; 
+  

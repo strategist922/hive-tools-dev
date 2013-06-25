@@ -1,0 +1,38 @@
+ add jar /home/yuanhang.ghj/123/jython-2.5.3.jar;  
+ add jar /home/yuanhang.ghj/12.jar;        
+  --启动python配置;
+ set hive.job.pre.hooks=python.PythonConf; 
+ 
+ create temporary function py  as 'python.Python';
+ 
+ add file /home/yuanhang.ghj/123/my.py;
+ 
+  
+set python=
+    
+    def echo(y):
+      return y 
+
+;
+
+ 
+ select py("return echo(col1)+' OK'", 'alimama') from dual;
+ 
+ select py("
+     if len(col1)>0:
+      return echo(col1)+' OK'
+     else:
+      return '阿里'
+     ", 'alimama') from dual;
+ 
+
+ create temporary function pym  as 'python.Python';
+ 
+ add file /home/yuanhang.ghj/123/my.py;
+ 
+ 
+ -- 外部函数;
+ select  pym('echo', '阿里妈妈')  from dual;
+ 
+ quit;
+ 

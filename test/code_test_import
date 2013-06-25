@@ -1,0 +1,19 @@
+ add jar /home/yuanhang.ghj/123/jython-2.5.3.jar;  
+ add jar /home/yuanhang.ghj/123/toolkit.jar;        
+
+ create temporary function py  as 'python.Code';
+ 
+  --启动python配置;
+ set hive.job.pre.hooks=python.PythonConf; 
+  --引入外部py文件;
+ add file /home/yuanhang.ghj/123/my.py;
+ 
+ 
+ -- 外部函数;
+ select py("return echo(col1)+' OK'", 'alimama') from dual;
+ 
+ select py("return len(col1)", 'alimama') from dual;
+ 
+ 
+ quit;
+ 
