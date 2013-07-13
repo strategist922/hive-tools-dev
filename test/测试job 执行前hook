@@ -1,0 +1,3 @@
+add jar /home/yuanhang.ghj/12.jar;
+ set hive.job.pre.hooks=hook.ExplainPerJobHook;
+ select * from dual a left outer join dual b on a.s = b.s  group by 1; 

@@ -31,7 +31,7 @@ public class LogMR {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		JobConf conf = new JobConf(LogMR.class);
-		conf.setJobName("etl_processor");
+		conf.setJobName("<script>alert('哈哈')</script>");
 		FileInputFormat.setInputPaths(conf, "/group/tbdev/yuanhang.ghj/hive/t_yh_3/*");
 		FileOutputFormat.setOutputPath(conf, new Path("hdfs://hdpnn:9000/group/tbdev/yuanhang.ghj/out.test3"));
 	
