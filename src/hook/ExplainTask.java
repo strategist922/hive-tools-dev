@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,21 +53,22 @@ import org.apache.hadoop.hive.ql.plan.ReduceSinkDesc;
 import org.apache.hadoop.hive.ql.plan.SelectDesc;
 import org.apache.hadoop.hive.ql.plan.TableScanDesc;
 import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.mapred.JobConf;
 
 
 
 public class ExplainTask  {
   private static final long serialVersionUID = 1L;
   private String stageid;
-  private MapredWork mapredwork;
+  private MapredWork mapredwork;//当前的mr
+  private JobConf jobconf;
   private static Map<String,String> explainWorkName = new HashMap<String,String>();
   private static Map<Class,String> explainOpName = new HashMap<Class,String>();
   private static Set<String> explainConf = new HashSet<String>(); 
   private static Map<String,String> path2stage = new HashMap<String,String>();
-
+  
   
   {
-	  
 	  explainWorkName.put("getAliasToWork","[Map 端] 操作 ");
 	  explainWorkName.put("getReducer","[Reduce 端] 操作 ");
 	  explainWorkName.put("getMapLocalWork","在单机上执行");
@@ -103,7 +105,6 @@ public class ExplainTask  {
       out = new PrintStream(outS);
       // Go over all the tasks and dump out the plans
       outputStagePlans(out, rootTasks, 0);
-     
 
       return (0);
     } catch (Exception e) {
@@ -113,15 +114,19 @@ public class ExplainTask  {
       IOUtils.closeStream(out);
     }
   }
-  public int explain(String stageid, ArrayList<Task<? extends Serializable>> rootTasks, OutputStream outS) {
+  public int explain(String stageid, Task<? extends Serializable> rootTask, OutputStream outS, JobConf jobconf) {
 	  
       this.stageid = stageid;
-      if (rootTasks!=null && rootTasks.get(0) instanceof MapRedTask) {
-    	   mapredwork = ((MapRedTask)rootTasks.get(0)).getWork();
+      this.jobconf = jobconf;
+      
+      if (rootTask!=null && rootTask instanceof MapRedTask) {
+    	   mapredwork = ((MapRedTask)rootTask).getWork();
       }
       PrintStream out = null;
       try {
         out = new PrintStream(outS);
+        List rootTasks = new ArrayList();
+        rootTasks.add(rootTask);
         // Go over all the tasks and dump out the plans
         outputStagePlans(out, rootTasks, 0);
         return (0);
@@ -140,16 +145,18 @@ public class ExplainTask  {
 
     return sb.toString();
   }
-  // 取得alias对应的path
+  
+  // 取得alias对应的path.返回头一个可能的路径
   private String aliasToPath(String alias) {
 	  Set<Entry<String, ArrayList<String>>> set = mapredwork.getPathToAliases().entrySet();
 	  for (Entry<String, ArrayList<String>> entry : set) {
-		  if (entry.getValue().equals(alias)) {
+		  if (entry.getValue().get(0).equals(alias)) {
 			  return entry.getKey();
 		  }
 	  }
 	  return "";
   }
+
   // 取得输入输出路径对应的产生stage。
   private String pathToStage(String path) {
 	  return path2stage.get(path);
@@ -271,7 +278,7 @@ public class ExplainTask  {
     	  String alias = ((TableScanDesc)work).getAlias();
     	  PartitionDesc pd = mapredwork.getAliasToPartnInfo().get(alias);
     	  if (pd != null && pd.getProperties().getProperty("name") != null) {
-    		  displayName += explainOpName.get(TableScanDesc.class) + " 表" + pd.getProperties().getProperty("name");
+    		//  displayName += explainOpName.get(TableScanDesc.class) + " 表" + pd.getProperties().getProperty("name");
     	  }
         } else if (explainOpName.get(work.getClass()) != null) {
           displayName = explainOpName.get(work.getClass());
