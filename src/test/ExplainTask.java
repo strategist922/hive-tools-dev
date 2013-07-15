@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package hook;
+package test;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
