@@ -23469,7 +23469,7 @@ public class HiveParser extends Parser {
             	    pushFollow(FOLLOW_queryStatement_in_queryStatementExpression10922);
             	    queryStatement669=queryStatement();
             	    _fsp--;
-//null-subquery1:a-subquery1:dual null-subquery2:a-subquery2:dual 
+//null-subquery1:a-subquery1:dual null-subquery2:a-subquery2:dual null-subquery2:a-subquery2:a-subquery1:a-subquery1:dual
             	    adaptor.addChild(root_0, queryStatement669.getTree());
 
             	    }
@@ -28560,13 +28560,17 @@ public class HiveParser extends Parser {
                     	    pushFollow(FOLLOW_joinToken_in_joinSource13002);
                     	    joinToken811=joinToken();
                     	    _fsp--;
-
+                    	    
+                    	    
                     	    root_0 = (CommonTree)adaptor.becomeRoot(joinToken811.getTree(), root_0);
                     	    pushFollow(FOLLOW_fromSource_in_joinSource13005);
                     	    fromSource812=fromSource();
                     	    _fsp--;
 
                     	    adaptor.addChild(root_0, fromSource812.getTree());
+                    	    
+                    	    adaptor.setTokenBoundaries(joinToken811.getTree(), null, input.LT(-1));
+                    	    
                     	    // /home/foo/comitter/hive-trunk/ql/src/java/org/apache/hadoop/hive/ql/parse/Hive.g:1788:42: ( KW_ON expression )?
                     	    int alt246=2;
                     	    int LA246_0 = input.LA(1);
@@ -28585,7 +28589,7 @@ public class HiveParser extends Parser {
                     	            _fsp--;
 
                     	            adaptor.addChild(root_0, expression814.getTree());
-
+                    	            adaptor.setTokenBoundaries(joinToken811.getTree(), null, input.LT(-1));
                     	            }
                     	            break;
 
@@ -28618,6 +28622,7 @@ public class HiveParser extends Parser {
                     _fsp--;
 
                     adaptor.addChild(root_0, uniqueJoinSource816.getTree());
+                    adaptor.setTokenBoundaries(uniqueJoinToken815.getTree(), null, input.LT(-1));
                     // /home/foo/comitter/hive-trunk/ql/src/java/org/apache/hadoop/hive/ql/parse/Hive.g:1789:41: ( COMMA uniqueJoinSource )+
                     int cnt248=0;
                     loop248:
@@ -28641,7 +28646,7 @@ public class HiveParser extends Parser {
                     	    _fsp--;
 
                     	    adaptor.addChild(root_0, uniqueJoinSource818.getTree());
-
+                    	    adaptor.setTokenBoundaries(uniqueJoinToken815.getTree(), null, input.LT(-1));
                     	    }
                     	    break;
 

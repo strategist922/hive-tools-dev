@@ -40,6 +40,7 @@ import org.apache.hadoop.hive.ql.exec.MapRedTask;
 import org.apache.hadoop.hive.ql.exec.Operator;
 import org.apache.hadoop.hive.ql.exec.TableScanOperator;
 import org.apache.hadoop.hive.ql.exec.Task;
+import org.apache.hadoop.hive.ql.parse.ParseException;
 import org.apache.hadoop.hive.ql.plan.Explain;
 import org.apache.hadoop.hive.ql.plan.FileSinkDesc;
 import org.apache.hadoop.hive.ql.plan.FilterDesc;
@@ -68,6 +69,9 @@ public class ExplainTask  {
   private static Set<String> hideWork = new HashSet<String>(); 
   private static Set<Class> hideOp = new HashSet<Class>(); 
   private static Map<String,String> path2stage = new HashMap<String,String>();
+  private ParseDriver parser = new ParseDriver();
+  private String parseredSQL = null;
+  private TreeWalker queryBlock = null;
   
   
   {
@@ -124,7 +128,18 @@ public class ExplainTask  {
 	  
       this.stageid = stageid;
       this.jobconf = jobconf;
+      String sql = jobconf.get("hive.query.string","");
       
+	  if (!sql.equals(parseredSQL)) { //if need to refresh
+	  	try {
+	  		queryBlock = parser.getQueryBlock(sql);
+	  		parseredSQL = sql;
+	  	} catch (ParseException e) {
+	  		// TODO Auto-generated catch block
+	  		e.printStackTrace();
+	  	}
+	  }
+	  
       if (rootTask!=null && rootTask instanceof MapRedTask) {
     	   mapredwork = ((MapRedTask)rootTask).getWork();
       }
@@ -183,8 +198,6 @@ public class ExplainTask  {
         out.println(header);
       }
       first_el = false;
-
-
       
       if (ent.getValue() instanceof TableScanOperator) {//如果是TableScanDesc
     	  out.print(indentString(indent));

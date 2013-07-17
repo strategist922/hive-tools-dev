@@ -21,6 +21,7 @@ package explain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.antlr.runtime.ANTLRStringStream;
@@ -35,6 +36,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.tree.TreeAdaptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -397,20 +399,7 @@ public class ParseDriver {
    * so that the graph walking algorithms and the rules framework defined in
    * ql.lib can be used with the AST Nodes.
    */
-  static final TreeAdaptor adaptor = new CommonTreeAdaptor() {
-    /**
-     * Creates an ASTNode for the given token. The ASTNode is a wrapper around
-     * antlr's CommonTree class that implements the Node interface.
-     *
-     * @param payload
-     *          The token.
-     * @return Object (which is actually an ASTNode) for the token.
-     */
-    @Override
-    public Object create(Token payload) {
-      return new ASTNode(payload);
-    }
-  };
+  static final ModTreeAdaptor adaptor = new ModTreeAdaptor() ;
 
   public ASTNode parse(String command) throws ParseException {
     return parse(command, null);
@@ -440,7 +429,7 @@ public class ParseDriver {
     }
     HiveParserX parser = new HiveParserX(tokens);
     parser.setTreeAdaptor(adaptor);
-    aliasmap = parser.aliasmap;
+    adaptor.iniwith(command);
     
     HiveParser.statement_return r = null;
     try {
@@ -459,5 +448,11 @@ public class ParseDriver {
     }
     
     return (ASTNode) r.getTree();
+  }
+  
+  public TreeWalker getQueryBlock(String command) throws ParseException {
+	  TreeWalker s = new TreeWalker();
+	  s.walk(this.parse(command));
+	  return s;
   }
 }
