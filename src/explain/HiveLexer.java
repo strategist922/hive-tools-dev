@@ -2,6 +2,7 @@
 package explain;
 
 import org.antlr.runtime.*;
+
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
@@ -535,6 +536,7 @@ public class HiveLexer extends Lexer {
     public HiveLexer(CharStream input) {
         super(input);
     }
+
     public String getGrammarFileName() { return "/home/foo/comitter/hive-trunk/ql/src/java/org/apache/hadoop/hive/ql/parse/Hive.g"; }
 
     // $ANTLR start KW_TRUE

@@ -420,6 +420,7 @@ public class ParseDriver {
 			 }
 			 if (stopToken != null) {
 				 node.stop = new ASTPNode.Pos(stopToken.getLine(),stopToken.getCharPositionInLine());
+				 node.stopTokenText = stopToken.getText();
 			 }
 		 }
 		 super.setTokenBoundaries(t, startToken, stopToken);

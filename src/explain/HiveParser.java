@@ -28569,7 +28569,7 @@ public class HiveParser extends Parser {
 
                     	    adaptor.addChild(root_0, fromSource812.getTree());
                     	    
-                    	    adaptor.setTokenBoundaries(joinToken811.getTree(), null, input.LT(1));
+                    	    adaptor.setTokenBoundaries(joinToken811.getTree(), null, input.LT(-1));
                     	    
                     	    // /home/foo/comitter/hive-trunk/ql/src/java/org/apache/hadoop/hive/ql/parse/Hive.g:1788:42: ( KW_ON expression )?
                     	    int alt246=2;
@@ -28589,7 +28589,7 @@ public class HiveParser extends Parser {
                     	            _fsp--;
 
                     	            adaptor.addChild(root_0, expression814.getTree());
-                    	            adaptor.setTokenBoundaries(joinToken811.getTree(), null, input.LT(1));
+                    	            adaptor.setTokenBoundaries(joinToken811.getTree(), null, input.LT(-1));
                     	            }
                     	            break;
 
@@ -28622,7 +28622,7 @@ public class HiveParser extends Parser {
                     _fsp--;
 
                     adaptor.addChild(root_0, uniqueJoinSource816.getTree());
-                    adaptor.setTokenBoundaries(uniqueJoinToken815.getTree(), null, input.LT(1));
+                    adaptor.setTokenBoundaries(uniqueJoinToken815.getTree(), null, input.LT(-1));
                     // /home/foo/comitter/hive-trunk/ql/src/java/org/apache/hadoop/hive/ql/parse/Hive.g:1789:41: ( COMMA uniqueJoinSource )+
                     int cnt248=0;
                     loop248:
@@ -28646,7 +28646,7 @@ public class HiveParser extends Parser {
                     	    _fsp--;
 
                     	    adaptor.addChild(root_0, uniqueJoinSource818.getTree());
-                    	    adaptor.setTokenBoundaries(uniqueJoinToken815.getTree(), null, input.LT(1));
+                    	    adaptor.setTokenBoundaries(uniqueJoinToken815.getTree(), null, input.LT(-1));
                     	    }
                     	    break;
 
