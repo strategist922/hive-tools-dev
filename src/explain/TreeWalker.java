@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.hadoop.hive.ql.lib.Node;
-import org.apache.hadoop.hive.ql.parse.ASTNode;
-import org.apache.hadoop.hive.ql.parse.ParseException;
+
 
 
 public class TreeWalker {
@@ -102,28 +100,5 @@ public class TreeWalker {
 		}
 	}
 	
-	public static void main(String[] args) {
-		ParseDriver parser = new ParseDriver();
-		try {
-			String sql = "select * from (select * from (select * from (select *  from  dual ) b union all select * from dual c ) a ) e";
-	
-			ASTNode nodes = parser.parse(sql);
-			System.out.println(nodes.dump());
-		
-			
-			TreeWalker s = new TreeWalker();
-		 	s.walk(nodes);
- 			for (ASTPNode n: s.tables) {
 
-				System.out.println(n.scope);
-				
-				System.out.println(sql.substring(n.startindex, n.stopindex) );
-				
-				System.out.println("*****");
-			} 
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-	}
 }

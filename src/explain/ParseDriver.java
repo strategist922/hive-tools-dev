@@ -449,4 +449,10 @@ public class ParseDriver {
     
     return (ASTNode) r.getTree();
   }
+  
+  public TreeWalker getQueryBlock(String command) throws ParseException {
+	  TreeWalker s = new TreeWalker();
+	  s.walk(this.parse(command));
+	  return s;
+  }
 }
