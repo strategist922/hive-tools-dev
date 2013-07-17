@@ -32,7 +32,7 @@ public class TestParserDriver {
 
 				System.out.println(n.scope);
 				
-				System.out.println(sql.substring(n.start.offset, n.stop.offset) +  n.stopTokenText);
+				System.out.println(sql.substring(n.startindex, n.stopindex) );
 				
 				System.out.println("*****");
 			} 

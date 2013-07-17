@@ -4,8 +4,8 @@ import org.antlr.runtime.Token;
 import org.apache.hadoop.hive.ql.parse.ASTNode;
 
 public class ASTPNode extends ASTNode {
-	public Pos start, stop;
-	public String stopTokenText = ""; //由于这里不保存token，只保存token开始位置，为了取最后一个token的值
+	public int startindex, stopindex;
+	
 	
 	public String scope;
 	public ASTPNode(Token payload) {
@@ -13,9 +13,7 @@ public class ASTPNode extends ASTNode {
 		super(payload);
 	}
 	
-	public String toString() {
-		return super.toString() + " " + start + " " + stop;
-	}
+
 	
 	
 	public static class Pos {

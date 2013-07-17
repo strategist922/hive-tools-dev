@@ -21,6 +21,7 @@ package explain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.antlr.runtime.ANTLRStringStream;
@@ -398,46 +399,7 @@ public class ParseDriver {
    * so that the graph walking algorithms and the rules framework defined in
    * ql.lib can be used with the AST Nodes.
    */
-  static final TreeAdaptor adaptor = new CommonTreeAdaptor() {
-    /**
-     * Creates an ASTNode for the given token. The ASTNode is a wrapper around
-     * antlr's CommonTree class that implements the Node interface.
-     *
-     * @param payload
-     *          The token.
-     * @return Object (which is actually an ASTNode) for the token.
-     */
-    @Override
-    public Object create(Token payload) {
-      return new ASTPNode(payload);
-    }
-	@Override
-	public void setTokenBoundaries(Object t, Token startToken, Token stopToken) {
-		 if (t instanceof ASTPNode) {
-			 ASTPNode node = (ASTPNode) t;
-			 if (startToken != null) {
-				 node.start = new ASTPNode.Pos(startToken.getLine(),startToken.getCharPositionInLine());
-			 }
-			 if (stopToken != null) {
-				 node.stop = new ASTPNode.Pos(stopToken.getLine(),stopToken.getCharPositionInLine());
-				 node.stopTokenText = stopToken.getText();
-			 }
-		 }
-		 super.setTokenBoundaries(t, startToken, stopToken);
-	}
-	@Override
-	public void addChild(Object t, Object child) {
-	/*	if (t instanceof ASTPNode && child instanceof ASTPNode) {
-			ASTPNode pn = (ASTPNode) t;
-			ASTPNode cn = (ASTPNode) child;
-			
-		}*/
-		super.addChild(t, child);
-	}
-
-
-
-  };
+  static final ModTreeAdaptor adaptor = new ModTreeAdaptor() ;
 
   public ASTNode parse(String command) throws ParseException {
     return parse(command, null);
@@ -467,7 +429,7 @@ public class ParseDriver {
     }
     HiveParserX parser = new HiveParserX(tokens);
     parser.setTreeAdaptor(adaptor);
-    
+    adaptor.iniwith(command);
     
     HiveParser.statement_return r = null;
     try {
