@@ -35,6 +35,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTreeAdaptor;
+import org.antlr.runtime.tree.Tree;
 import org.antlr.runtime.tree.TreeAdaptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -408,8 +409,33 @@ public class ParseDriver {
      */
     @Override
     public Object create(Token payload) {
-      return new ASTNode(payload);
+      return new ASTPNode(payload);
     }
+	@Override
+	public void setTokenBoundaries(Object t, Token startToken, Token stopToken) {
+		 if (t instanceof ASTPNode) {
+			 ASTPNode node = (ASTPNode) t;
+			 if (startToken != null) {
+				 node.start = new ASTPNode.Pos(startToken.getLine(),startToken.getCharPositionInLine());
+			 }
+			 if (stopToken != null) {
+				 node.stop = new ASTPNode.Pos(stopToken.getLine(),stopToken.getCharPositionInLine());
+			 }
+		 }
+		 super.setTokenBoundaries(t, startToken, stopToken);
+	}
+	@Override
+	public void addChild(Object t, Object child) {
+	/*	if (t instanceof ASTPNode && child instanceof ASTPNode) {
+			ASTPNode pn = (ASTPNode) t;
+			ASTPNode cn = (ASTPNode) child;
+			
+		}*/
+		super.addChild(t, child);
+	}
+
+
+
   };
 
   public ASTNode parse(String command) throws ParseException {
@@ -440,7 +466,7 @@ public class ParseDriver {
     }
     HiveParserX parser = new HiveParserX(tokens);
     parser.setTreeAdaptor(adaptor);
-    aliasmap = parser.aliasmap;
+    
     
     HiveParser.statement_return r = null;
     try {
