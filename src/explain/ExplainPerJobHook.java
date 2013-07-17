@@ -20,15 +20,11 @@ import python.Base32;
 
 public class ExplainPerJobHook implements PreJobHook,PostJobHook  {
 	ExplainTask explainTask = new ExplainTask();
-	ParseDriver parser = new ParseDriver();
-	String parseredSQL = null;
-	TreeWalker queryBlock = null;
+
 	@Override
 	public void run(SessionState session, QueryPlan queryPlan, JobConf job,
 			Integer taskId) throws Exception {
-		if (!job.get("hive.query.string","").equals(parseredSQL)) { //if need to refresh
-			queryBlock = parser.getQueryBlock(job.get("hive.query.string",""));
-		}
+
 		ArrayList<Task<? extends Serializable>> rootTasks = queryPlan.getRootTasks();
 		Task<? extends Serializable>  rootTask = findTasksForStage(rootTasks, "Stage-" + taskId);
 		ByteArrayOutputStream outs = new ByteArrayOutputStream();
@@ -36,7 +32,6 @@ public class ExplainPerJobHook implements PreJobHook,PostJobHook  {
 		explainTask.explain("Stage-" + taskId, rootTask, outs, job);
 		
 		String formattedPlan = new String(outs.toByteArray());
-		 
 		
 		outs.close();
 		System.out.println(formattedPlan);
