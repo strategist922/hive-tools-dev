@@ -31,7 +31,7 @@ public class TestTreeWalker extends TestCase {
 				System.out.println(sql.substring(n.startindex, Math.min(sql.length(), n.stopindex)));
 				
 				System.out.println("*****");
-			} 
+			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -44,6 +44,7 @@ public class TestTreeWalker extends TestCase {
 			//String sql = "select * from (select * from (select *  from  z c) b union all select * from ax c ) a";
 			String sql = "select  * from (select *  from ss join a on a.s = s.bsdf and c.s=2 left outer join c on c.s = a.ss and c.s=c.xxx+13"
 					+ " right outer join c on c.s = a.x group by s.sfd , s.sdf)  a left outer join c on c.s = a.ss and c.s=c.xxx+13 right outer join c on c.s = a.x + 120 group by sfd,sdf";
+					//	String sql = "select * from dual a left outer join dual b on a.s = b.s left outer join dual c  on c.s=a.s left outer join dual f  on 1=f.s left outer join dual e on e.s = a.s";
 			ASTNode nodes = parser.parse(sql);
 			System.out.println(nodes.dump());
 			
