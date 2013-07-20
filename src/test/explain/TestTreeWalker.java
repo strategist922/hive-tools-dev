@@ -7,7 +7,7 @@ import org.apache.hadoop.hive.ql.parse.ParseException;
 
 import explain.ASTPNode;
 import explain.ParseDriver;
-import explain.TreeWalker;
+import explain.QBAliasWalker;
 
 
 public class TestTreeWalker extends TestCase {
@@ -22,8 +22,8 @@ public class TestTreeWalker extends TestCase {
 			ASTNode nodes = parser.parse(sql);
 			System.out.println(nodes.dump());
 			
-			TreeWalker s = new TreeWalker();
-		 	s.walk(nodes);
+			QBAliasWalker s = new QBAliasWalker();
+		 	s.walkin(nodes);
  			for (ASTPNode n: s.groupbys) {
 
 				System.out.println(n.scope);
@@ -47,8 +47,8 @@ public class TestTreeWalker extends TestCase {
 			ASTNode nodes = parser.parse(sql);
 			System.out.println(nodes.dump());
 			
-			TreeWalker s = new TreeWalker();
-		 	s.walk(nodes);
+			QBAliasWalker s = new QBAliasWalker();
+		 	s.walkin(nodes);
  			for (ASTPNode n: s.joins) {
 
 				System.out.println(n.scope);
@@ -72,8 +72,8 @@ public class TestTreeWalker extends TestCase {
 			ASTNode nodes = parser.parse(sql);
 			System.out.println(nodes.dump());
 			
-			TreeWalker s = new TreeWalker();
-		 	s.walk(nodes);
+			QBAliasWalker s = new QBAliasWalker();
+		 	s.walkin(nodes);
  			for (ASTPNode n: s.tables) {
 
 				System.out.println(n.scope);
@@ -97,8 +97,8 @@ public class TestTreeWalker extends TestCase {
 			ASTNode nodes = parser.parse(sql);
 			System.out.println(nodes.dump());
 		
-			TreeWalker s = new TreeWalker();
-		 	s.walk(nodes);
+			QBAliasWalker s = new QBAliasWalker();
+		 	s.walkin(nodes);
  			for (ASTPNode n: s.tables) {
 
 				System.out.println(n.scope);

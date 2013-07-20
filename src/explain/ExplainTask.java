@@ -71,8 +71,8 @@ public class ExplainTask  {
   private static Map<String,String> path2stage = new HashMap<String,String>();
   private ParseDriver parser = new ParseDriver();
   private String parseredSQL = null;
-  private TreeWalker queryBlock = null;
-  
+  private QBAliasWalker queryBlock = null;
+  private MRBlockInfo mrBlock = null;
   
   {
 	  explainWorkName.put("getAliasToWork","[Map 端] 操作 ");
@@ -128,6 +128,8 @@ public class ExplainTask  {
 	  
       this.stageid = stageid;
       this.jobconf = jobconf;
+      this.mrBlock = new MRBlockInfo();
+      
       String sql = jobconf.get("hive.query.string","");
       
 	  if (!sql.equals(parseredSQL)) { //if need to refresh
@@ -148,8 +150,11 @@ public class ExplainTask  {
         out = new PrintStream(outS);
         List rootTasks = new ArrayList();
         rootTasks.add(rootTask);
-        // Go over all the tasks and dump out the plans
+        // Go over this task and dump out the plan
         outputStagePlans(out, rootTasks, 0);
+        
+        //output the sql this task will execute
+        
         return (0);
       } catch (Exception e) {
     	  e.printStackTrace();
@@ -158,6 +163,16 @@ public class ExplainTask  {
         IOUtils.closeStream(out);
       }
   }
+  
+  private void outputSQL(PrintStream out, QBAliasWalker queryBlock, MRBlockInfo mrBlock) {
+	  if (mrBlock.inputs == null) return;
+	  for (String input : mrBlock.inputs) {
+		  //queryBlock.joins
+	  }
+	  
+  }
+  
+  
   private String indentString(int indent) {
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < indent; ++i) {
@@ -210,6 +225,7 @@ public class ExplainTask  {
     	  } else { //普通对应
     		  input = " 表" + rawTableName;
     	  }
+    	  mrBlock.inputs.add(input);
           out.printf("%s ", explainOpName.get(TableScanDesc.class) +   input);
       } else {
           // Print the key

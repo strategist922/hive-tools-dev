@@ -450,8 +450,8 @@ public class ParseDriver {
     return (ASTNode) r.getTree();
   }
   
-  public TreeWalker getQueryBlock(String command) throws ParseException {
-	  TreeWalker s = new TreeWalker();
+  public QBAliasWalker getQueryBlock(String command) throws ParseException {
+	  QBAliasWalker s = new QBAliasWalker();
 	  s.walk(this.parse(command));
 	  return s;
   }
