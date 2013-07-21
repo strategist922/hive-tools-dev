@@ -101,7 +101,7 @@ public class SemHook extends AbstractSemanticAnalyzerHook {
 		}
 	}
 
-	@Override
+	 
 	public void postAnalyze(HiveSemanticAnalyzerHookContext context,
 			List<Task<? extends Serializable>> rootTasks, FetchTask fetchTask)
 			throws SemanticException {

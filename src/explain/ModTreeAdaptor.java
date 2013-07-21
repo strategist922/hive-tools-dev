@@ -22,7 +22,7 @@ public class ModTreeAdaptor extends CommonTreeAdaptor {
 	 	 }
 	 	 if (stopToken != null) {
 	 		 node.stopindex = getOffset(stopToken.getLine(),
-	 				 stopToken.getCharPositionInLine() + stopToken.getText().length()); 
+	 				 stopToken.getCharPositionInLine()) + stopToken.getText().length(); 
 	 		 		//结尾token指的是它的index，这里加上token的length，方便取出query block
 	 	 }
 	 	}
@@ -38,7 +38,7 @@ public class ModTreeAdaptor extends CommonTreeAdaptor {
 	 	} 
 	 }
 	 
-	 private int getOffset(int line, int offset) { //antlr是从1开始
+	 private int getOffset(int line, int offset) { //antlr是line从1开始,offset 从0 开始
 	 	assert(strlenArr != null);
 	 	int roffset = 0;
 	 	for (int i=0; i < line-1; i++) {
@@ -46,5 +46,13 @@ public class ModTreeAdaptor extends CommonTreeAdaptor {
 	 	}
 	 	roffset += offset;
 	 	return roffset;
+	 }
+	 
+	 public static void main(String[] a) {
+		 ModTreeAdaptor mta = new ModTreeAdaptor();
+		 String sql = "select \nfrom \nyou";
+		 mta.iniwith(sql);
+		 System.out.println(sql.substring(mta.getOffset(1, 1), mta.getOffset(2, 2)+1));
+		 
 	 }
 }

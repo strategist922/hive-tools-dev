@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.hadoop.hive.ql.QueryPlan;
 import org.apache.hadoop.hive.ql.exec.MapredLocalTask;
 import org.apache.hadoop.hive.ql.exec.Task;
-import org.apache.hadoop.hive.ql.hooks.PostJobHook;
+
 import org.apache.hadoop.hive.ql.hooks.PreJobHook;
 import org.apache.hadoop.hive.ql.session.SessionState;
 import org.apache.hadoop.mapred.JobConf;
@@ -18,7 +18,7 @@ import org.apache.hadoop.mapred.RunningJob;
 
 import python.Base32;
 
-public class ExplainPerJobHook implements PreJobHook,PostJobHook  {
+public class ExplainPerJobHook implements PreJobHook  {
 	ExplainTask explainTask = new ExplainTask();
 
 	@Override
@@ -36,11 +36,11 @@ public class ExplainPerJobHook implements PreJobHook,PostJobHook  {
 		outs.close();
 		System.out.println(formattedPlan);
 		
-		
+		/*
 		if (job.get("hive.job.post.hooks") == null || 
 				!job.get("hive.job.post.hooks").contains("hook.ExplainPerJobHook")) {
 			job.set("hive.job.post.hooks", "explain.ExplainPerJobHook");
-		}
+		}*/
 	}
 
 	private Task<? extends Serializable> findTasksForStage(
@@ -59,7 +59,7 @@ public class ExplainPerJobHook implements PreJobHook,PostJobHook  {
 	}
  
 	// 运行后的hook，用于解释hashtable sink
-		@Override
+		
 	public void run(SessionState session, QueryPlan queryPlan, JobConf job,
 			RunningJob runningJob, Integer taskId) {
 		// TODO Auto-generated method stub

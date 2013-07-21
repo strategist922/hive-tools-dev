@@ -1,4 +1,4 @@
-1，对树后序遍历，然后　把输入的两个子引用，加入join中，　把[A]  和 [B]　和　[C]　映射　subsql1 subsql2　subsql3
+1，对sql树后序遍历，然后　把输入的两个子引用，加入join中，　把[A]  和 [B]　和　[C]　映射　subsql1 subsql2　subsql3
 
 2,　从mr的输入表，如　A, B。如果有joinop。　那么[A]&&[B]对应subsql1.subsql2　再把当前的stage-1 映射到[A]&&[B]
 

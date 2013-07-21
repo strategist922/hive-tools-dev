@@ -450,9 +450,17 @@ public class ParseDriver {
     return (ASTNode) r.getTree();
   }
   
-  public QBAliasWalker getQueryBlock(String command) throws ParseException {
-	  QBAliasWalker s = new QBAliasWalker();
-	  s.walk(this.parse(command));
-	  return s;
+  public QueryInfo getQueryBlock(String command) throws ParseException {
+	  ASTNode nodes = this.parse(command);
+	  QBAliasWalker aw = new QBAliasWalker();
+	  aw.walk(nodes);
+	  QBInfoWalker infow = new QBInfoWalker();
+	  infow.walk(nodes);
+	  
+	  QueryInfo qi = new QueryInfo();
+	  qi.joinmap = infow.joinmap;
+	  qi.sql = command;
+	  qi.tables = aw.tables;
+	  return qi;
   }
 }

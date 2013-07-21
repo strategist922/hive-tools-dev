@@ -1,3 +1,29 @@
 add jar /home/yuanhang.ghj/12.jar;
  set hive.job.pre.hooks=explain.ExplainPerJobHook;
  select * from dual a left outer join dual b on a.s = b.s  group by 1; 
+ 
+ add jar /home/foo/12.jar;
+ set hive.job.pre.hooks=explain.ExplainPerJobHook;
+ select * from dual a left outer join dual b on a.s = b.s  group by 1; 
+ 
+ 
+  add jar /home/foo/12.jar;
+ set hive.job.pre.hooks=explain.ExplainPerJobHook;
+ select * from dual a left outer join (select dual.s from dual d 
+  left outer join dual on dual.s = d.s )b on a.s = b.s  ;
+  
+    add jar /home/foo/12.jar;
+ set hive.job.pre.hooks=explain.ExplainPerJobHook;
+   select * from (select dual.s from dual d 
+  left outer join dual on dual.s = d.s ) a left outer join (select dual.s from dual d 
+  left outer join dual on dual.s = d.s )b on a.s = b.s  ;
+  
+     select * from (select dual.s from dual d 
+  left outer join dual on dual.s = d.s ) a left outer join (select dual.s from (select dual.s from  dual d 
+  left outer join dual on dual.s = d.s ) d 
+  left outer join dual on dual.s = d.s )b on a.s = b.s  ;
+  
+  
+   select * from dual a left outer join (select dual.s from dual d 
+  left outer join dual on dual.s = d.s union all select dual.s from dual d 
+  left outer join dual on dual.s = d.s)b on a.s = b.s  ;

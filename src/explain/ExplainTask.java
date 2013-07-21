@@ -69,10 +69,12 @@ public class ExplainTask  {
   private static Set<String> hideWork = new HashSet<String>(); 
   private static Set<Class> hideOp = new HashSet<Class>(); 
   private static Map<String,String> path2stage = new HashMap<String,String>();
+  private static Map<String,Set<String>> stage2input = new HashMap<String, Set<String>>();
   private ParseDriver parser = new ParseDriver();
   private String parseredSQL = null;
-  private QBAliasWalker queryBlock = null;
+  private QueryInfo queryBlock = null;
   private MRBlockInfo mrBlock = null;
+  
   
   {
 	  explainWorkName.put("getAliasToWork","[Map 端] 操作 ");
@@ -130,7 +132,7 @@ public class ExplainTask  {
       this.jobconf = jobconf;
       this.mrBlock = new MRBlockInfo();
       
-      String sql = jobconf.get("hive.query.string","");
+      String sql = jobconf.get("hive.query.string","").replace("\n", " ");
       
 	  if (!sql.equals(parseredSQL)) { //if need to refresh
 	  	try {
@@ -154,6 +156,7 @@ public class ExplainTask  {
         outputStagePlans(out, rootTasks, 0);
         
         //output the sql this task will execute
+        outputSQL(out);
         
         return (0);
       } catch (Exception e) {
@@ -164,12 +167,49 @@ public class ExplainTask  {
       }
   }
   
-  private void outputSQL(PrintStream out, QBAliasWalker queryBlock, MRBlockInfo mrBlock) {
-	  if (mrBlock.inputs == null) return;
-	  for (String input : mrBlock.inputs) {
-		  //queryBlock.joins
+  private void outputSQL(PrintStream out) {
+	  
+	  List<Position> inputlist = new ArrayList<Position>();
+	  for (String inputTablealias : mrBlock.inputTable) {
+		  Position inp = queryBlock.joinmap.get(inputTablealias);
+		  if (inp!=null) {
+			  inputlist.add(inp);
+		  }
+	  }
+	  stage2input.put(this.stageid, mrBlock.inputTable);//还得加入当前ｓｔａｇｅ
+	  
+	  List<Position> inputStage = new ArrayList<Position>();
+	  
+	  for (String inputStageid : mrBlock.inputStage) {
+		  ASTPNode parent = queryBlock.findParent(stage2input.get(inputStageid));
+		  if (parent == null) continue;
+		  Position stagepos = new Position(parent.startindex,parent.stopindex);
+		  stagepos.outputPrexfix = "已经执行的" + inputStageid + "  ";
+		  stagepos.outputPostfix = stagepos.outputPrexfix;
+		  inputStage.add(stagepos);
+		  Position parentpos = queryBlock.joinmap.get(parent.scope);
+		  if (parentpos != null) {
+			  inputlist.add(parentpos);
+		  }
 	  }
 	  
+	  //Position.sort(inputlist);
+	  
+	  System.out.println("****meregr sql****");
+	  
+	  Position.mergerOutput(inputlist,inputStage, System.out, queryBlock.sql);
+	  
+	  System.out.println("****debug sql****");
+	  
+	  for(Position s : inputlist) {
+		  System.out.println(queryBlock.sql.substring(s.startindex,s.stopindex + 1));
+	  }
+	  System.out.println("****stageid****");
+	  
+	  for(Position s : inputStage) {
+		  System.out.println(queryBlock.sql.substring(s.startindex,s.stopindex + 1));
+	  }
+	  System.out.println("********");
   }
   
   
@@ -218,14 +258,20 @@ public class ExplainTask  {
     	  out.print(indentString(indent));
     	  String rawTableName = ent.getKey().toString();
     	  String input = "";
+    	  
     	  if (rawTableName.contains("://")) {//如果是路径
-    		  input = pathToStage(rawTableName) + "的输出文件";
+    		  String stage = pathToStage(rawTableName);
+    		  input = stage + "的输出文件";
+    		  mrBlock.inputStage.add(stage);
     	  } else if (rawTableName.contains("$")) {//如果是$INTNAME 
-    		  input = pathToStage(aliasToPath(rawTableName)) + "的输出文件";
+    		  String stage = pathToStage(aliasToPath(rawTableName));
+    		  input = stage + "的输出文件";
+    		  mrBlock.inputStage.add(stage);
     	  } else { //普通对应
     		  input = " 表" + rawTableName;
+    		  mrBlock.inputTable.add(rawTableName);
     	  }
-    	  mrBlock.inputs.add(input);
+    	 
           out.printf("%s ", explainOpName.get(TableScanDesc.class) +   input);
       } else {
           // Print the key
