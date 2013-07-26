@@ -23,7 +23,7 @@ public class TestTreeWalker extends TestCase {
 			System.out.println(nodes.dump());
 			
 			QBAliasWalker s = new QBAliasWalker();
-		 	s.walkin(nodes);
+		 	s.walk(nodes);
  			for (ASTPNode n: s.groupbys) {
 
 				System.out.println(n.scope);
@@ -49,7 +49,7 @@ public class TestTreeWalker extends TestCase {
 			System.out.println(nodes.dump());
 			
 			QBAliasWalker s = new QBAliasWalker();
-		 	s.walkin(nodes);
+		 	s.walk(nodes);
  			for (ASTPNode n: s.joins) {
 
 				System.out.println(n.scope);
@@ -74,7 +74,7 @@ public class TestTreeWalker extends TestCase {
 			System.out.println(nodes.dump());
 			
 			QBAliasWalker s = new QBAliasWalker();
-		 	s.walkin(nodes);
+		 	s.walk(nodes);
  			for (ASTPNode n: s.tables) {
 
 				System.out.println(n.scope);
@@ -99,12 +99,12 @@ public class TestTreeWalker extends TestCase {
 			System.out.println(nodes.dump());
 		
 			QBAliasWalker s = new QBAliasWalker();
-		 	s.walkin(nodes);
+		 	s.walk(nodes);
  			for (ASTPNode n: s.tables) {
 
 				System.out.println(n.scope);
 				
-				System.out.println(sql.substring(n.startindex, n.stopindex) );
+				System.out.println(sql.substring(n.startindex, n.stopindex));
 				
 				System.out.println("*****");
 			} 

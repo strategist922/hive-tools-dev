@@ -30,8 +30,11 @@ public class SemHook extends AbstractSemanticAnalyzerHook {
 	 // 防止下面的driver.run递归进入这个hook,先关闭这个hook
 		String hook = context.getConf().get("hive.semantic.analyzer.hook");
 		context.getConf().set("hive.semantic.analyzer.hook", "");
-		
-		
+		// 加上precode代码，和配置的hook
+		String prehook = context.getConf().get("hive.job.pre.hooks", "");
+		if (!prehook.contains("python.PythonConf")) {
+			context.getConf().set("hive.job.pre.hooks", prehook + (prehook.equals("")? "":",") + "python.PythonConf");
+		}
 		try {
 			String cmd = " create temporary function __py__  as 'python.Method'";
 			Driver driver = new Driver();

@@ -8,3 +8,9 @@
  
   select py("return len(col1)", 'alimama') from dual;
  
+ set hive.job.pre.hooks=python.PythonConf; 
+set python=                
+def getlen(x):
+  return "hii"   
+;
+select getlen(s) from dual;

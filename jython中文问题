@@ -1,0 +1,4 @@
+1，无法识别中文。
+2，无法使用import sys;reload(sys);sys.setdefaultencoding('utf-8')
+
+3，最后使用https://bitbucket.org/yyamano/jython/src/89bbdf124e6b/?at=issue1066的修改版

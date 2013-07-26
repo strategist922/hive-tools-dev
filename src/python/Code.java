@@ -117,6 +117,8 @@ public class Code extends GenericUDF {
   private void iniPythonEnv(String rawcode) {
     interp = new PythonInterpreter();
     
+    interp.exec("import sys;reload(sys);sys.setdefaultencoding('utf-8')");//设置编码，处理中文
+    
     importor.includeTo(interp);
     
     String argsDec = genArgs(argcount);

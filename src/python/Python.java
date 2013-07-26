@@ -22,7 +22,7 @@ public class Python extends GenericUDF {
 		String strcode = ((WritableConstantStringObjectInspector)arguments[0])
 							.getWritableConstantValue().toString();
 		
-		if (strcode.trim().contains("return ") && instance == null) {
+		if (strcode.trim().startsWith("return ") && instance == null) {
 			instance = new Code();//运行代码块
 		} else {
 			instance = new Method();//运行函数
@@ -32,7 +32,12 @@ public class Python extends GenericUDF {
 
 	@Override
 	public Object evaluate(DeferredObject[] arguments) throws HiveException {
-		return instance.evaluate(arguments);
+		try {
+			return instance.evaluate(arguments);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Python函数执行异常");
+		}
 	}
 
 	@Override
