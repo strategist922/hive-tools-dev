@@ -11,9 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -63,7 +65,60 @@ public class Hive2Mysql {
 		String dir = findHDFSPath(hivetable, partition);
 		hdfs2mysql(dir,mysqltable);
 	}
+	/**
+	 * 从mysql导入hive表
+	 * @param mysqltable
+	 * @param hivetable
+	 * @param partition
+	 */
+	public void mysql2hive(String mysqltable, String hivetable, String partition) {
+		String dir = findHDFSPath(hivetable, null);
+		try {
+			String filepath = mysql2hdfs(mysqltable,dir);
+			//TODO 登记到hive表中
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
+	private String mysql2hdfs(String mysqltable, String dir) throws Exception {
+		// TODO Auto-generated method stub
+		Configuration conf = new Configuration();
+		//加载特定的hadoop-site.xml
+		conf.addResource(Hive2Mysql.class.getResource("/hadoop-site.xml"));
+		FileSystem sfs = FileSystem.newInstance(conf);
+		String filepath = dir + "/" + new Random().nextInt(1000);
+		Path path = new Path(filepath);
+		Text key = new Text();
+		Text value = new Text(); 
+		SequenceFile.Writer writer =  SequenceFile.createWriter(sfs, conf, path, Text.class, Text.class);
+
+		
+		String sql = "select * from " + mysqltable;
+	    ResultSet rs = newDBconn.prepareStatement(sql).executeQuery();
+	    ResultSetMetaData rsmd = rs.getMetaData();
+	    StringBuilder sb = new StringBuilder();
+	    
+        while (rs.next()) {
+    	    sb.append(rs.getObject(1));
+    	    
+            for (int i=2 ; i <= rsmd.getColumnCount(); i ++) { 
+            	Object col = rs.getObject(i);
+            	if (col == null) {
+            		col = "\\N";
+            	}
+            	sb.append("\001" + col);
+            }
+          
+			value.set(sb.toString());
+			writer.append(key, value);
+			
+            sb.setLength(0);
+        }
+        return filepath;
+	}
 	
 	/**
 	 * 倒云梯文件入mysql
