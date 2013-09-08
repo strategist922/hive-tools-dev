@@ -74,7 +74,7 @@ public class Hive2Mysql {
 	public void mysql2hive(String mysqltable, String hivetable, String partition) {
 		String dir = findHDFSPath(hivetable, null);
 		try {
-			String filepath = mysql2hdfs(mysqltable,dir);
+			String filepath = mysql2hdfs(mysqltable, dir);
 			//TODO 登记到hive表中
 			
 		} catch (Exception e) {

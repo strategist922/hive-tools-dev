@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+    <property>
+        <name>mapred.job.queue.name</name>
+        <value>cug-tbdp-dev</value>
+    </property>
+    <property>
+        <name>fs.default.name</name>
+        <value>hdfs://hdpnn:9000</value>
+    </property>
+    <property>
+        <name>mapred.job.tracker</name>
+        <value>hdpjt:9001</value>
+    </property>
+
+    <property>     
+        <name>mapred.reduce.tasks</name>
+        <value>300</value>
+        <description>The default number of reduce tasks per job.  Typically set
+            to a prime close to the number of available hosts.  Ignored when
+            mapred.job.tracker is "local".
+        </description>
+    </property>
+
+    <property>
+        <name>mapred.working.dir</name>
+        <value>/group/tbdev/yuanhang.ghj</value>
+    </property>
+    
+    <property>
+        <name>dfs.umask</name>
+        <value>23</value>
+    </property>
+
+    <property>
+        <name>fs.trash.interval</name>
+        <value>1440</value>
+    </property>
+
+    <property>
+        <name>mapred.job.type</name>
+        <value>experimental</value>
+    </property>
+
+    <property>
+        <name>mapred.child.java.opts</name>
+        <value>-Xmx1024m</value>
+        <description></description>
+    </property>
+
+    <property>
+       <name>dfs.socket.timeout</name>
+       <value>300000</value>
+    </property>
+    <property>
+       <name>dfs.datanode.socket.write.timeout</name>
+       <value>300000</value>                                                                               
+    </property> 
+    <property>
+       <name>mapred.output.compression.type</name>
+       <value>BLOCK</value>
+       <description>If the job outputs are to compressed as SequenceFiles, how should
+               they be compressed? Should be one of NONE, RECORD or BLOCK.
+       </description>
+    </property>
+
+    <property>
+      <name>dfs.block.size</name>
+      <value>268435456</value>
+      <description>The default block size for new files.</description>
+    </property>
+
+<!--
+  for compress when map is over!
+-->
+    <property>
+        <name>mapred.map.output.compression.codec</name>
+		<value>org.apache.hadoop.io.compress.LzoCodec</value>
+    </property>
+    <property>
+      <name>mapred.compress.map.output</name>
+      <value>true</value>
+    </property>
+    <property>
+        <name>mapred.map.max.attempts</name>
+        <value>5</value>
+    </property>
+    <property>
+        <name>mapred.reduce.max.attempts</name>
+        <value>5</value>
+    </property>
+    <property>
+        <name>mapred.max.tracker.failures</name>
+        <value>4</value>
+    </property>
+    <property>
+        <name>hadoop.job.ugi</name>
+        <value>yuanhang.ghj,cug-tbdp-dev,cug-tbdp,#Tb520520</value>
+    </property>
+    <property>
+        <name>mapred.map.max</name>
+        <value>15000</value>
+    </property>
+<property>
+	<name>mapred.cache.shared.enabled</name>
+	<value>false</value>
+</property>
+<property>
+	<name>mapred.task.profile</name>
+	<value>true</value>
+</property>
+<property>
+	<name>mapred.task.profile.params</name>
+	<value>-agentlib:hprof=cpu=samples,depth=6,force=n,thread=y,verbose=n,file=%s</value>
+</property>
+<property>
+	<name>mapreduce.client.profile.download.enabled</name>
+	<value>false</value>
+</property>
+</configuration>
